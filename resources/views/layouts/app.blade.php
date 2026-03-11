@@ -20,7 +20,7 @@
             <div class="flex items-center gap-10">
                 <a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="flex items-center gap-2">
                     <i class="fa-solid fa-graduation-cap fa-lg" style="color: rgb(255, 255, 255);"></i>
-                    <span class="text-xl font-black tracking-tighter text-gray-900 dark:text-white transition-colors">Sistema Educativo</span>
+                    <span class="text-xl font-black tracking-tighter text-gray-900 dark:text-white transition-colors">Sistema Escolar</span>
                 </a>
 
                 @auth
