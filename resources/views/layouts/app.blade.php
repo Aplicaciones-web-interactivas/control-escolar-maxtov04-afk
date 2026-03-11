@@ -26,8 +26,8 @@
                 @auth
                 <div class="hidden md:flex items-center gap-8">
                     <a href="{{ route('materias.index') }}" class="text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Materias</a>
-                    <a href="#" class="text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Grupos</a>
-                    <a href="#" class="text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Horarios</a>
+                    <a href="{{ route('grupos.lista') }}" class="text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Grupos</a>
+                    <a href="{{ route('horarios.lista') }}" class="text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Horarios</a>
                 </div>
                 @endauth
             </div>
