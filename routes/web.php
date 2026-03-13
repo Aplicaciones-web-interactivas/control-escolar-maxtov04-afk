@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MateriaController;
 use App\Http\Controllers\HorarioController;
+use App\Http\Controllers\GrupoController;
 
 // INICIO Y AUTH
 Route::get('/', function () { return view('dashboard'); })->name('dashboard');
@@ -15,7 +16,6 @@ Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
 
 // CRUD DE MATERIAS
 Route::get('/materias', [MateriaController::class, 'index'])->name('materias.index');
@@ -32,10 +32,6 @@ Route::put('/horarios/{id}', [HorarioController::class, 'actualizar'])->name('ho
 Route::delete('/horarios/{id}', [HorarioController::class, 'eliminar'])->name('horarios.eliminar');
 
 // CRUD DE GRUPOS
-// Hasta arriba con los demás:
-use App\Http\Controllers\GrupoController;
-
-// Abajo, con las rutas de materias y horarios:
 Route::get('/grupos', [GrupoController::class, 'index'])->name('grupos.lista');
 Route::post('/grupos', [GrupoController::class, 'store'])->name('grupos.guardar');
 Route::get('/grupos/{id}/editar', [GrupoController::class, 'editar'])->name('grupos.editar');
