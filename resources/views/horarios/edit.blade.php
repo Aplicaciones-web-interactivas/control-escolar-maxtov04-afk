@@ -4,7 +4,7 @@
 <div class="max-w-2xl mx-auto">
     <div class="bg-white dark:bg-gray-800 p-6 rounded shadow-md transition-colors duration-300">
         <h2 class="text-xl font-bold mb-6 dark:text-white transition-colors">Editar Horario</h2>
-        
+
         <form action="{{ route('horarios.actualizar', $horario->id) }}" method="POST" class="space-y-4">
             @csrf
             @method('PUT')
@@ -37,12 +37,11 @@
                 <label class="block text-gray-700 dark:text-gray-300 font-bold mb-2 transition-colors">Días:</label>
                 <div class="flex flex-wrap gap-4 p-3 border dark:border-gray-600 rounded dark:bg-gray-700/50 transition-colors">
                     @php
-                        // Convertimos el string "Lunes, Miércoles" a un array para compararlo
                         $diasGuardados = explode(', ', $horario->dias);
                     @endphp
                     @foreach(['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'] as $dia)
                         <label class="flex items-center gap-2 cursor-pointer text-sm dark:text-gray-300 hover:text-blue-600 transition-colors">
-                            <input type="checkbox" name="dias[]" value="{{ $dia }}" 
+                            <input type="checkbox" name="dias[]" value="{{ $dia }}"
                                    class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-500"
                                    {{ in_array($dia, $diasGuardados) ? 'checked' : '' }}>
                             {{ $dia }}
@@ -50,7 +49,7 @@
                     @endforeach
                 </div>
             </div>
-            
+
             <div class="flex gap-4">
                 <div class="w-1/2">
                     <label class="block text-gray-700 dark:text-gray-300 font-bold mb-2 transition-colors">Hora de Inicio:</label>
@@ -70,5 +69,5 @@
             </div>
         </form>
     </div>
-</div> 
+</div>
 @endsection
