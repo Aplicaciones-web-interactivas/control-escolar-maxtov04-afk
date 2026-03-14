@@ -17,6 +17,7 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+
 // CRUD DE MATERIAS
 Route::get('/materias', [MateriaController::class, 'index'])->name('materias.index');
 Route::post('/materias', [MateriaController::class, 'store'])->name('materias.store');
