@@ -74,7 +74,10 @@ class HorarioController extends Controller
     }
 
     public function eliminar($id) {
-        Horario::findOrFail($id)->delete();
-        return redirect()->route('horarios.lista')->with('danger', 'Horario eliminado del sistema.');
-    }
+            $horario = Horario::findOrFail($id);
+            \App\Models\Grupo::where('horario_id', $id)->delete();
+            $horario->delete();
+
+            return redirect()->route('horarios.lista')->with('danger', 'El horario y sus grupos ligados fueron eliminados.');
+        }
 }
