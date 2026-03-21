@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MateriaController;
 use App\Http\Controllers\HorarioController;
 use App\Http\Controllers\GrupoController;
+use App\Http\Controllers\CalificacionController;
 
 // INICIO Y AUTH
 Route::get('/', function () { return view('dashboard'); })->name('dashboard');
@@ -37,3 +38,10 @@ Route::post('/grupos', [GrupoController::class, 'store'])->name('grupos.guardar'
 Route::get('/grupos/{id}/editar', [GrupoController::class, 'editar'])->name('grupos.editar');
 Route::put('/grupos/{id}', [GrupoController::class, 'actualizar'])->name('grupos.actualizar');
 Route::delete('/grupos/{id}', [GrupoController::class, 'eliminar'])->name('grupos.eliminar');
+
+// CRUD DE CALIFICACIONES
+Route::get('/calificaciones', [CalificacionController::class, 'index'])->name('calificaciones.lista');
+Route::post('/calificaciones', [CalificacionController::class, 'store'])->name('calificaciones.guardar');
+Route::get('/calificaciones/{id}/editar', [CalificacionController::class, 'editar'])->name('calificaciones.editar');
+Route::put('/calificaciones/{id}', [CalificacionController::class, 'actualizar'])->name('calificaciones.actualizar');
+Route::delete('/calificaciones/{id}', [CalificacionController::class, 'eliminar'])->name('calificaciones.eliminar');

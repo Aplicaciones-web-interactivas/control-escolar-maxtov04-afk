@@ -28,6 +28,7 @@
                     <a href="{{ route('materias.index') }}" class="text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Materias</a>
                     <a href="{{ route('grupos.lista') }}" class="text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Grupos</a>
                     <a href="{{ route('horarios.lista') }}" class="text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Horarios</a>
+                    <a href="{{ route('calificaciones.lista') }}" class="text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Calificaciones</a>
                 </div>
                 @endauth
             </div>
