@@ -12,7 +12,7 @@ class CalificacionController extends Controller
     public function index() {
         $calificaciones = Calificacion::with(['grupo', 'alumno'])->get();
         $grupos = Grupo::all();
-        $alumnos = User::where('rol', 'alumno')->get();
+        $alumnos = User::whereIn('rol', ['alumno', 'estudiante', 'Estudiante'])->get();
         
         return view('calificaciones.index', compact('calificaciones', 'grupos', 'alumnos'));
     }
@@ -37,7 +37,7 @@ class CalificacionController extends Controller
     public function editar($id) {
         $calificacion = Calificacion::findOrFail($id);
         $grupos = Grupo::all();
-        $alumnos = User::where('rol', 'alumno')->get();
+        $alumnos = User::whereIn('rol', ['alumno', 'estudiante', 'Estudiante'])->get();
         
         return view('calificaciones.edit', compact('calificacion', 'grupos', 'alumnos'));
     }

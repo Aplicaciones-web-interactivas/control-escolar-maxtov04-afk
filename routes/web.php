@@ -6,6 +6,8 @@ use App\Http\Controllers\MateriaController;
 use App\Http\Controllers\HorarioController;
 use App\Http\Controllers\GrupoController;
 use App\Http\Controllers\CalificacionController;
+use App\Http\Controllers\InscripcionController;
+use Illuminate\Support\Facades\Http;
 
 // INICIO Y AUTH
 Route::get('/', function () { return view('dashboard'); })->name('dashboard');
@@ -45,3 +47,42 @@ Route::post('/calificaciones', [CalificacionController::class, 'store'])->name('
 Route::get('/calificaciones/{id}/editar', [CalificacionController::class, 'editar'])->name('calificaciones.editar');
 Route::put('/calificaciones/{id}', [CalificacionController::class, 'actualizar'])->name('calificaciones.actualizar');
 Route::delete('/calificaciones/{id}', [CalificacionController::class, 'eliminar'])->name('calificaciones.eliminar');
+
+// CRUD DE INSCRIPCIONES
+Route::get('/inscripciones', [InscripcionController::class, 'index'])->name('inscripciones.lista');
+Route::post('/inscripciones', [InscripcionController::class, 'store'])->name('inscripciones.guardar');
+Route::get('/inscripciones/{id}/editar', [InscripcionController::class, 'editar'])->name('inscripciones.editar');
+Route::put('/inscripciones/{id}', [InscripcionController::class, 'actualizar'])->name('inscripciones.actualizar');
+Route::delete('/inscripciones/{id}', [InscripcionController::class, 'eliminar'])->name('inscripciones.eliminar');
+
+// CHUCK NORRIS
+Route::get('/', function () {return redirect()->route('login');});
+
+Route::get('/inicio', function () {
+    $totalMaterias = \App\Models\Materia::count();
+    $totalUsuarios = \App\Models\User::count();
+
+    $chisteChuckNorris = null;
+
+    if (Auth::user()->rol === 'profesor') {
+        try {
+            $respuestaChuck = Http::withoutVerifying()->get('https://api.chucknorris.io/jokes/random');
+
+            if ($respuestaChuck->successful()) {
+                $chisteIngles = $respuestaChuck->json()['value'];
+
+            $respuestaTraduccion = Http::withoutVerifying()->get('https://api.mymemory.translated.net/get', [
+                'q' => $chisteIngles,
+                'langpair' => 'en|es'
+            ]);
+
+                if ($respuestaTraduccion->successful()) {
+                    $chisteChuckNorris = $respuestaTraduccion->json()['responseData']['translatedText'];
+                }
+            }
+        } catch (\Exception $e) {
+            $chisteChuckNorris = "Chuck Norris ya murió";
+        }
+    }
+
+    return view('dashboard', compact('totalMaterias', 'totalUsuarios', 'chisteChuckNorris'));})->name('dashboard')->middleware('auth');

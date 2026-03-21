@@ -47,9 +47,10 @@
                     </td>
                     <td class="p-3 flex gap-2 items-center h-full mt-2">
                         <a href="{{ route('grupos.editar', $grupo->id) }}" class="text-blue-600 dark:text-blue-400 font-bold hover:text-blue-800 dark:hover:text-blue-300 transition-colors">Editar</a>
-                        <form action="{{ route('grupos.eliminar', $grupo->id) }}" method="POST" class="inline">
+                        
+                        <form id="form-delete-{{ $grupo->id }}" action="{{ route('grupos.eliminar', $grupo->id) }}" method="POST" class="inline">
                             @csrf @method('DELETE')
-                            <button class="text-red-600 dark:text-red-400 font-bold hover:text-red-800 dark:hover:text-red-300 transition-colors">Eliminar</button>
+                            <button type="button" onclick="abrirModal({{ $grupo->id }})" class="text-red-600 dark:text-red-400 font-bold hover:text-red-800 dark:hover:text-red-300 transition-colors">Eliminar</button>
                         </form>
                     </td>
                 </tr>
@@ -58,4 +59,45 @@
         </table>
     </div>
 </div>
+
+<div id="modal-delete" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm transition-opacity">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full p-6 mx-4 transform transition-all">
+        <div class="flex items-center gap-3 mb-4">
+            <div class="bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 p-2 rounded-full">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white">Eliminar Grupo</h3>
+        </div>
+        <p class="text-sm text-gray-600 dark:text-gray-300 mb-6">
+            Si eliminas este grupo, <span class="font-bold text-red-600 dark:text-red-400">también se borrarán permanentemente todas las CALIFICACIONES e INSCRIPCIONES</span> que estén ligadas a él.<br><br>¿Estás completamente seguro de continuar?
+        </p>
+        <div class="flex justify-end gap-3">
+            <button type="button" onclick="cerrarModal()" class="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded font-bold hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">Cancelar</button>
+            <button type="button" onclick="confirmarEliminacion()" class="px-4 py-2 bg-red-600 text-white rounded font-bold hover:bg-red-700 transition-colors">Sí, eliminar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let formActual = null;
+    const modal = document.getElementById('modal-delete');
+
+    function abrirModal(id) {
+        formActual = document.getElementById('form-delete-' + id);
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    function cerrarModal() {
+        formActual = null;
+        modal.classList.remove('flex');
+        modal.classList.add('hidden');
+    }
+
+    function confirmarEliminacion() {
+        if (formActual) {
+            formActual.submit();
+        }
+    }
+</script>
 @endsection

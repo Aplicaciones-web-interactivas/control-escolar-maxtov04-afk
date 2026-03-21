@@ -52,7 +52,13 @@ class GrupoController extends Controller
     }
 
     public function eliminar($id) {
-        Grupo::findOrFail($id)->delete();
-        return redirect()->route('grupos.lista')->with('danger', 'Grupo eliminado del sistema.');
+        $grupo = Grupo::findOrFail($id);
+
+        \App\Models\Calificacion::where('grupo_id', $id)->delete();
+        \App\Models\Inscripcion::where('grupo_id', $id)->delete();
+
+        $grupo->delete();
+
+        return redirect()->route('grupos.lista')->with('danger', 'El grupo y sus registros ligados fueron eliminados.');
     }
 }

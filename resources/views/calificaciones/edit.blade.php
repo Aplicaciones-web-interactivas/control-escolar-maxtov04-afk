@@ -27,7 +27,7 @@
                     <option value="" disabled>Selecciona un Alumno</option>
                     @foreach($alumnos as $alumno)
                         <option value="{{ $alumno->id }}" {{ $calificacion->usuario_id == $alumno->id ? 'selected' : '' }}>
-                            {{ $alumno->nombre }}
+                            ({{ $alumno->clave_institucional }}) {{ $alumno->nombre }}
                         </option>
                     @endforeach
                 </select>
