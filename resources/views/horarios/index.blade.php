@@ -17,7 +17,7 @@
             <select name="usuario_id" class="border dark:border-gray-600 p-2 rounded w-full dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all" required>
                 <option value="" disabled selected>Asignar Profesor</option>
                 @foreach($profesores as $profesor)
-                    <option value="{{ $profesor->id }}">({{$profesor->id}}) {{ $profesor->nombre }}</option>
+                    <option value="{{ $profesor->id }}">({{$profesor->clave_institucional}}) {{ $profesor->nombre }}</option>
                 @endforeach
             </select>
 

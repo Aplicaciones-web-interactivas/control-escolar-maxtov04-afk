@@ -9,17 +9,15 @@ class Calificacion extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'grupo_id',
-        'usuario_id',
-        'calificacion'
-    ];
+    protected $table = 'calificacions';
 
-    public function grupo() {
-        return $this->belongsTo(Grupo::class);
+    protected $fillable = ['grupo_id', 'usuario_id', 'calificacion'];
+
+    public function usuario() {
+        return $this->belongsTo(User::class, 'usuario_id');
     }
 
-    public function alumno() {
-        return $this->belongsTo(User::class, 'usuario_id');
+    public function grupo() {
+        return $this->belongsTo(Grupo::class, 'grupo_id');
     }
 }

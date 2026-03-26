@@ -9,13 +9,40 @@ use App\Models\Horario;
 class GrupoController extends Controller
 {
     public function index() {
-        $grupos = Grupo::with(['horario.materia', 'horario.profesor'])->get();
-        $horarios = Horario::with(['materia', 'profesor'])->get();
-        
-        return view('grupos.index', compact('grupos', 'horarios'));
+        $usuario = auth()->user();
+
+        if (strtolower($usuario->rol) === 'admin') {
+            $grupos = \App\Models\Grupo::all();
+            $horarios = \App\Models\Horario::all();
+            return view('grupos.index', compact('grupos', 'horarios'));
+        }
+
+        if (strtolower($usuario->rol) === 'profesor') {
+            $grupos = \App\Models\Grupo::whereHas('horario', function($query) use ($usuario) {
+                $query->where('usuario_id', $usuario->id);
+            })->get();
+            
+            return view('grupos.profesor', compact('grupos'));
+        }
+
+        if (strtolower($usuario->rol) === 'estudiante') {
+            $grupos = \App\Models\Grupo::all();
+            
+            $misInscripciones = \App\Models\Inscripcion::where('usuario_id', $usuario->id)
+                                ->pluck('grupo_id')
+                                ->toArray();
+                                
+            return view('grupos.estudiante', compact('grupos', 'misInscripciones'));
+        }
+
+        return redirect()->route('dashboard');
     }
 
     public function store(Request $request) {
+        if (strtolower(auth()->user()->rol) !== 'admin') {
+            return redirect()->route('dashboard')->withErrors(['error' => 'No tienes permiso para crear grupos.']);
+        }
+        
         $request->validate([
             'nombre' => 'required',
             'horario_id' => 'required|exists:horarios,id',
@@ -30,6 +57,10 @@ class GrupoController extends Controller
     }
 
     public function editar($id) {
+        if (strtolower(auth()->user()->rol) !== 'admin') {
+            return redirect()->route('dashboard')->withErrors(['error' => 'No tienes permiso para editar grupos.']);
+        }
+
         $grupo = Grupo::findOrFail($id);
         $horarios = Horario::with(['materia', 'profesor'])->get();
         
@@ -37,6 +68,10 @@ class GrupoController extends Controller
     }
 
     public function actualizar(Request $request, $id) {
+        if (strtolower(auth()->user()->rol) !== 'admin') {
+            return redirect()->route('dashboard')->withErrors(['error' => 'No tienes permiso para actualizar grupos.']);
+        }
+
         $request->validate([
             'nombre' => 'required',
             'horario_id' => 'required|exists:horarios,id',
@@ -52,6 +87,10 @@ class GrupoController extends Controller
     }
 
     public function eliminar($id) {
+        if (strtolower(auth()->user()->rol) !== 'admin') {
+            return redirect()->route('dashboard')->withErrors(['error' => 'No tienes permiso para eliminar grupos.']);
+        }
+
         $grupo = Grupo::findOrFail($id);
 
         \App\Models\Calificacion::where('grupo_id', $id)->delete();

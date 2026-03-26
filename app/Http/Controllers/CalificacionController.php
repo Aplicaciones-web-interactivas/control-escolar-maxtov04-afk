@@ -5,65 +5,55 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Calificacion;
 use App\Models\Grupo;
-use App\Models\User;
+use App\Models\Inscripcion;
 
 class CalificacionController extends Controller
 {
     public function index() {
-        $calificaciones = Calificacion::with(['grupo', 'alumno'])->get();
-        $grupos = Grupo::all();
-        $alumnos = User::whereIn('rol', ['alumno', 'estudiante', 'Estudiante'])->get();
-        
-        return view('calificaciones.index', compact('calificaciones', 'grupos', 'alumnos'));
-    }
+        $usuario = auth()->user();
 
-    public function store(Request $request) {
-        $request->validate([
-            'grupo_id' => 'required|exists:grupos,id',
-            'usuario_id' => 'required|exists:users,id',
-            'calificacion' => 'required|numeric|min:0|max:100',
-        ], [
-            'grupo_id.required' => 'Debes seleccionar un grupo.',
-            'usuario_id.required' => 'Debes seleccionar un alumno.',
-            'calificacion.required' => 'La calificación es obligatoria.',
-            'calificacion.numeric' => 'La calificación debe ser un número.',
-        ]);
+        if (strtolower($usuario->rol) === 'admin') {
+            $calificaciones = Calificacion::with(['usuario', 'grupo.horario.materia'])->get();
+            return view('calificaciones.index', compact('calificaciones'));
+        }
 
-        Calificacion::create($request->all());
+        if (strtolower($usuario->rol) === 'profesor') {
+            $misGrupos = Grupo::whereHas('horario', function($query) use ($usuario) {
+                $query->where('usuario_id', $usuario->id);
+            })->with(['horario.materia'])->get();
 
-        return redirect()->route('calificaciones.lista')->with('success', 'Calificación registrada correctamente.');
-    }
+            $calificaciones = Calificacion::with(['usuario', 'grupo.horario.materia'])
+                ->whereIn('grupo_id', $misGrupos->pluck('id'))
+                ->get();
 
-    public function editar($id) {
-        $calificacion = Calificacion::findOrFail($id);
-        $grupos = Grupo::all();
-        $alumnos = User::whereIn('rol', ['alumno', 'estudiante', 'Estudiante'])->get();
-        
-        return view('calificaciones.edit', compact('calificacion', 'grupos', 'alumnos'));
+            return view('calificaciones.profesor', compact('calificaciones', 'misGrupos'));
+        }
+
+        if (strtolower($usuario->rol) === 'estudiante') {
+            $misCalificaciones = Calificacion::with(['grupo.horario.materia', 'grupo.horario.profesor'])
+                ->where('usuario_id', $usuario->id)
+                ->get();
+
+            return view('calificaciones.estudiante', compact('misCalificaciones'));
+        }
+
+        return redirect()->route('dashboard');
     }
 
     public function actualizar(Request $request, $id) {
+        if (!in_array(strtolower(auth()->user()->rol), ['admin', 'profesor'])) {
+            return redirect()->route('dashboard')->withErrors(['error' => 'No tienes permiso para calificar.']);
+        }
+
         $request->validate([
-            'grupo_id' => 'required|exists:grupos,id',
-            'usuario_id' => 'required|exists:users,id',
-            'calificacion' => 'required|numeric|min:0|max:100',
-        ], [
-            'grupo_id.required' => 'Debes seleccionar un grupo.',
-            'usuario_id.required' => 'Debes seleccionar un alumno.',
-            'calificacion.required' => 'La calificación es obligatoria.',
-            'calificacion.numeric' => 'La calificación debe ser un número.',
+            'calificacion' => 'required|numeric|min:0|max:10',
         ]);
 
         $calificacion = Calificacion::findOrFail($id);
-        $calificacion->update($request->all());
+        $calificacion->update([
+            'calificacion' => $request->calificacion
+        ]);
 
-        return redirect()->route('calificaciones.lista')->with('success', 'Calificación actualizada correctamente.');
-    }
-
-    public function eliminar($id) {
-        $calificacion = Calificacion::findOrFail($id);
-        $calificacion->delete();
-        
-        return redirect()->route('calificaciones.lista')->with('danger', 'Calificación eliminada del sistema.');
+        return back()->with('success', 'Calificación actualizada correctamente.');
     }
 }

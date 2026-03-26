@@ -49,8 +49,25 @@ class MateriaController extends Controller
     }
 
     public function eliminar($id) {
-        Materia::findOrFail($id)->delete();
+        $materia = Materia::findOrFail($id);
 
-        return redirect()->route('materias.index')->with('danger', 'Materia eliminada del sistema.');
+        $horarios = \App\Models\Horario::where('materia_id', $id)->get();
+
+        foreach ($horarios as $horario) {
+            $grupos = \App\Models\Grupo::where('horario_id', $horario->id)->get();
+
+            foreach ($grupos as $grupo) {
+                \App\Models\Calificacion::where('grupo_id', $grupo->id)->delete();
+                \App\Models\Inscripcion::where('grupo_id', $grupo->id)->delete();
+                
+                $grupo->delete();
+            }
+            
+            $horario->delete();
+        }
+
+        $materia->delete();
+
+        return redirect()->route('materias.index')->with('danger', 'Materia y todos sus registros ligados eliminados del sistema.');
     }
 }

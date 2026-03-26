@@ -25,11 +25,25 @@
 
                 @auth
                 <div class="hidden md:flex items-center gap-8">
-                    <a href="{{ route('materias.index') }}" class="text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Materias</a>
-                    <a href="{{ route('grupos.lista') }}" class="text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Grupos</a>
-                    <a href="{{ route('horarios.lista') }}" class="text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Horarios</a>
-                    <a href="{{ route('calificaciones.lista') }}" class="text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Calificaciones</a>
-                    <a href="{{ route('inscripciones.lista') }}" class="text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Inscripciones</a>
+                    <a href="{{ route('dashboard') }}" class="text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Inicio</a>
+
+                    @if(strtolower(auth()->user()->rol) === 'admin')
+                        <a href="{{ route('materias.index') }}" class="text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Materias</a>
+                        <a href="{{ route('horarios.lista') }}" class="text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Horarios</a>
+                        <a href="{{ route('grupos.lista') }}" class="text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Grupos</a>
+                        <a href="{{ route('inscripciones.lista') }}" class="text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Inscripciones</a>
+                        <a href="{{ route('usuarios.lista') }}" class="text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Usuarios</a>
+                    @endif
+
+                    @if(strtolower(auth()->user()->rol) === 'profesor')
+                        <a href="{{ route('grupos.lista') }}" class="text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Mis Grupos</a>
+                        <a href="{{ route('calificaciones.lista') }}" class="text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Calificaciones</a>
+                    @endif
+                    @if(strtolower(auth()->user()->rol) === 'estudiante')
+                        <a href="{{ route('grupos.lista') }}" class="text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Oferta Académica</a>
+                        <a href="{{ route('horarios.lista') }}" class="text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Mi Horario</a>
+                        <a href="{{ route('calificaciones.lista') }}" class="text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Mis Calificaciones</a>
+                    @endif
                 </div>
                 @endauth
             </div>

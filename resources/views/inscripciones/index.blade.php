@@ -48,8 +48,8 @@
             <tbody>
                 @foreach($inscripciones as $inscripcion)
                 <tr class="border-t dark:border-gray-700 transition-colors">
-                    <td class="p-3 dark:text-gray-300 font-bold">{{ $inscripcion->alumno->clave_institucional }}</td>
-                    <td class="p-3 dark:text-gray-300">{{ $inscripcion->alumno->nombre }}</td>
+                    <td class="p-3 dark:text-gray-300 font-bold">{{ $inscripcion->usuario->clave_institucional }}</td>
+                    <td class="p-3 dark:text-gray-300">{{ $inscripcion->usuario->nombre }}</td>
                     <td class="p-3 dark:text-gray-300">{{ $inscripcion->grupo->nombre }}</td>
                     <td class="p-3 dark:text-gray-300">{{ $inscripcion->grupo->horario->materia->nombre }}</td>
                     <td class="p-3 dark:text-gray-300">{{ $inscripcion->grupo->horario->profesor->nombre }}</td>

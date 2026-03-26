@@ -7,6 +7,7 @@ use App\Http\Controllers\HorarioController;
 use App\Http\Controllers\GrupoController;
 use App\Http\Controllers\CalificacionController;
 use App\Http\Controllers\InscripcionController;
+use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Http;
 
 // INICIO Y AUTH
@@ -54,6 +55,13 @@ Route::post('/inscripciones', [InscripcionController::class, 'store'])->name('in
 Route::get('/inscripciones/{id}/editar', [InscripcionController::class, 'editar'])->name('inscripciones.editar');
 Route::put('/inscripciones/{id}', [InscripcionController::class, 'actualizar'])->name('inscripciones.actualizar');
 Route::delete('/inscripciones/{id}', [InscripcionController::class, 'eliminar'])->name('inscripciones.eliminar');
+
+// CRUD DE USUARIOS
+Route::get('/usuarios', [UsuarioController::class, 'index'])->name('usuarios.lista');
+Route::post('/usuarios', [UsuarioController::class, 'store'])->name('usuarios.guardar');
+Route::get('/usuarios/{id}/editar', [UsuarioController::class, 'editar'])->name('usuarios.editar');
+Route::put('/usuarios/{id}', [UsuarioController::class, 'actualizar'])->name('usuarios.actualizar');
+Route::delete('/usuarios/{id}', [UsuarioController::class, 'eliminar'])->name('usuarios.eliminar');
 
 // CHUCK NORRIS
 Route::get('/', function () {return redirect()->route('login');});

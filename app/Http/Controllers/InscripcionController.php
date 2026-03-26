@@ -4,26 +4,28 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Inscripcion;
-use App\Models\Grupo;
+use App\Models\Calificacion;
 use App\Models\User;
+use App\Models\Grupo;
 
 class InscripcionController extends Controller
-{
+    {
     public function index() {
-        $inscripciones = Inscripcion::with(['grupo.horario.materia', 'alumno'])->get();
-        $grupos = Grupo::with(['horario.materia', 'horario.profesor'])->get();
-        $alumnos = User::whereIn('rol', ['alumno', 'estudiante', 'Estudiante'])->get();
-        
-        return view('inscripciones.index', compact('inscripciones', 'grupos', 'alumnos'));
+        if (strtolower(auth()->user()->rol) !== 'admin') {
+            return redirect()->route('dashboard');
+        }
+
+        $inscripciones = Inscripcion::with(['usuario', 'grupo.horario.materia'])->get();
+        $alumnos = User::where('rol', 'estudiante')->get(); 
+        $grupos = Grupo::with('horario.materia')->get();
+
+        return view('inscripciones.index', compact('inscripciones', 'alumnos', 'grupos'));
     }
 
     public function store(Request $request) {
         $request->validate([
             'grupo_id' => 'required|exists:grupos,id',
             'usuario_id' => 'required|exists:users,id',
-        ], [
-            'grupo_id.required' => 'Debes seleccionar un grupo.',
-            'usuario_id.required' => 'Debes seleccionar un alumno para inscribir.',
         ]);
 
         $existe = Inscripcion::where('grupo_id', $request->grupo_id)
@@ -31,41 +33,80 @@ class InscripcionController extends Controller
                              ->first();
 
         if ($existe) {
-            return back()->withErrors(['error' => 'El alumno ya está inscrito en este grupo.']);
+            return back()->withErrors(['error' => 'El estudiante ya está inscrito en este grupo.']);
         }
 
-        Inscripcion::create($request->all());
+        Inscripcion::create([
+            'grupo_id' => $request->grupo_id,
+            'usuario_id' => $request->usuario_id
+        ]);
 
-        return redirect()->route('inscripciones.lista')->with('success', 'Alumno inscrito correctamente.');
+        $existeCalificacion = Calificacion::where('grupo_id', $request->grupo_id)
+                                          ->where('usuario_id', $request->usuario_id)
+                                          ->first();
+
+        if (!$existeCalificacion) {
+            Calificacion::create([
+                'grupo_id' => $request->grupo_id,
+                'usuario_id' => $request->usuario_id,
+            ]);
+        }
+
+        return back()->with('success', 'Inscripción realizada correctamente.');
     }
 
     public function editar($id) {
+        if (strtolower(auth()->user()->rol) !== 'admin') {
+            return redirect()->route('dashboard');
+        }
+
         $inscripcion = Inscripcion::findOrFail($id);
-        $grupos = Grupo::with(['horario.materia', 'horario.profesor'])->get();
-        $alumnos = User::whereIn('rol', ['alumno', 'estudiante', 'Estudiante'])->get();
-        
-        return view('inscripciones.edit', compact('inscripcion', 'grupos', 'alumnos'));
+        $alumnos = User::where('rol', 'estudiante')->get();
+        $grupos = Grupo::with('horario.materia')->get();
+
+        return view('inscripciones.edit', compact('inscripcion', 'alumnos', 'grupos'));
     }
 
     public function actualizar(Request $request, $id) {
+        if (strtolower(auth()->user()->rol) !== 'admin') {
+            return redirect()->route('dashboard');
+        }
+
         $request->validate([
             'grupo_id' => 'required|exists:grupos,id',
             'usuario_id' => 'required|exists:users,id',
-        ], [
-            'grupo_id.required' => 'Debes seleccionar un grupo.',
-            'usuario_id.required' => 'Debes seleccionar un alumno.',
         ]);
 
         $inscripcion = Inscripcion::findOrFail($id);
-        $inscripcion->update($request->all());
+
+        Calificacion::where('grupo_id', $inscripcion->grupo_id)
+                    ->where('usuario_id', $inscripcion->usuario_id)
+                    ->update([
+                        'grupo_id' => $request->grupo_id,
+                        'usuario_id' => $request->usuario_id
+                    ]);
+
+        $inscripcion->update([
+            'grupo_id' => $request->grupo_id,
+            'usuario_id' => $request->usuario_id
+        ]);
 
         return redirect()->route('inscripciones.lista')->with('success', 'Inscripción actualizada correctamente.');
     }
 
     public function eliminar($id) {
+        if (strtolower(auth()->user()->rol) !== 'admin') {
+            return redirect()->route('dashboard')->withErrors(['error' => 'No tienes permiso para eliminar inscripciones.']);
+        }
+
         $inscripcion = Inscripcion::findOrFail($id);
-        $inscripcion->delete();
         
-        return redirect()->route('inscripciones.lista')->with('danger', 'Inscripción eliminada del sistema.');
+        Calificacion::where('grupo_id', $inscripcion->grupo_id)
+                    ->where('usuario_id', $inscripcion->usuario_id)
+                    ->delete();
+
+        $inscripcion->delete();
+
+        return back()->with('danger', 'Inscripción y registro de calificaciones eliminados.');
     }
 }
