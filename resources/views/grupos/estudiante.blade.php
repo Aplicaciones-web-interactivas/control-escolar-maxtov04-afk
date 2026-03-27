@@ -4,7 +4,7 @@
 <div class="max-w-6xl mx-auto">
     <div class="flex items-center gap-3 mb-6">
         <i class="fa-solid fa-book-open text-2xl text-blue-600 dark:text-blue-400"></i>
-        <h2 class="text-2xl font-black text-gray-800 dark:text-white transition-colors">Oferta Académica</h2>
+        <h2 class="text-2xl font-black text-gray-800 dark:text-white transition-colors">Cursos Disponibles</h2>
     </div>
 
     <div class="bg-white dark:bg-gray-800 rounded shadow-md overflow-hidden transition-colors duration-300">

@@ -17,4 +17,9 @@ class Grupo extends Model
     public function horario() {
         return $this->belongsTo(Horario::class);
     }
+
+    public function tareas()
+    {
+        return $this->hasMany(Tarea::class);
+    }
 }

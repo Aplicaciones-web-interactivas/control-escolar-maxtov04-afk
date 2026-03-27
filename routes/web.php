@@ -8,6 +8,7 @@ use App\Http\Controllers\GrupoController;
 use App\Http\Controllers\CalificacionController;
 use App\Http\Controllers\InscripcionController;
 use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\TareaController;
 use Illuminate\Support\Facades\Http;
 
 // INICIO Y AUTH
@@ -62,6 +63,22 @@ Route::post('/usuarios', [UsuarioController::class, 'store'])->name('usuarios.gu
 Route::get('/usuarios/{id}/editar', [UsuarioController::class, 'editar'])->name('usuarios.editar');
 Route::put('/usuarios/{id}', [UsuarioController::class, 'actualizar'])->name('usuarios.actualizar');
 Route::delete('/usuarios/{id}', [UsuarioController::class, 'eliminar'])->name('usuarios.eliminar');
+
+// RUTAS DE TAREAS Y ENTREGAS
+Route::get('/profesor/mis-grupos', [TareaController::class, 'misGrupos'])->name('profesor.misGrupos');
+Route::get('/profesor/grupo/{grupo}/administrar', [TareaController::class, 'administrar'])->name('profesor.administrar');
+Route::post('/profesor/grupo/{grupo}/tareas', [TareaController::class, 'store'])->name('profesor.tareas.store');
+Route::get('/profesor/tareas/{tarea}/editar', [TareaController::class, 'editar'])->name('profesor.tareas.editar');
+Route::put('/profesor/tareas/{tarea}', [TareaController::class, 'actualizar'])->name('profesor.tareas.actualizar');
+Route::delete('/profesor/tareas/{tarea}', [TareaController::class, 'eliminar'])->name('profesor.tareas.eliminar');
+
+Route::get('/estudiante/mis-grupos', [TareaController::class, 'misGruposEstudiante'])->name('estudiante.misGrupos');
+Route::get('/estudiante/grupo/{grupo}/tareas', [TareaController::class, 'tareasGrupo'])->name('estudiante.tareas');
+Route::post('/estudiante/tareas/{tarea}/entregar', [TareaController::class, 'entregarTarea'])->name('estudiante.tareas.entregar');
+
+// REVISIÓN PROFESOR DE ENTREGAS
+Route::get('/profesor/tareas/{tarea}/revisiones', [TareaController::class, 'revisiones'])->name('profesor.tareas.revisiones');
+Route::put('/profesor/entregas/{entrega}/calificar', [TareaController::class, 'calificar'])->name('profesor.entregas.calificar');
 
 // CHUCK NORRIS
 Route::get('/', function () {return redirect()->route('login');});

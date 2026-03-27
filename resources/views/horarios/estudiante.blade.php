@@ -10,7 +10,7 @@
     <div class="bg-white dark:bg-gray-800 rounded shadow-md overflow-hidden transition-colors duration-300">
         @if($misGrupos->isEmpty())
             <div class="p-8 text-center text-gray-500 dark:text-gray-400 font-bold">
-                Aún no estás inscrito en ningún grupo. Ve a "Oferta Académica" para inscribirte.
+                Aún no estás inscrito en ningún grupo. Ve a "Cursos Disponibles" para inscribirte.
             </div>
         @else
             <table class="w-full text-left border-collapse">

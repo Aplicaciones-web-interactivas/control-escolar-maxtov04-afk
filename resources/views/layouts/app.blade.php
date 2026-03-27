@@ -36,13 +36,14 @@
                     @endif
 
                     @if(strtolower(auth()->user()->rol) === 'profesor')
-                        <a href="{{ route('grupos.lista') }}" class="text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Mis Grupos</a>
+                        <a href="{{ route('profesor.misGrupos') }}" class="text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Mis Grupos</a>
                         <a href="{{ route('calificaciones.lista') }}" class="text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Calificaciones</a>
                     @endif
                     @if(strtolower(auth()->user()->rol) === 'estudiante')
-                        <a href="{{ route('grupos.lista') }}" class="text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Oferta Académica</a>
+                        <a href="{{ route('grupos.lista') }}" class="text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Cursos Disponibles</a>
                         <a href="{{ route('horarios.lista') }}" class="text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Mi Horario</a>
                         <a href="{{ route('calificaciones.lista') }}" class="text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Mis Calificaciones</a>
+                        <a href="{{ route('estudiante.misGrupos') }}" class="text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"> Mis Tareas</a>
                     @endif
                 </div>
                 @endauth
@@ -105,21 +106,20 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const alertaExito = document.getElementById('alerta-exito');
-            const alertaError = document.getElementById('alerta-error');
-            const alertaPeligro = document.getElementById('alerta-peligro');
             const ocultarAlerta = (elemento) => {
                 if (elemento) {
                     setTimeout(() => {
-                        elemento.classList.add('opacity-0');
+                        elemento.classList.add('transition-opacity', 'duration-500', 'opacity-0');
                         setTimeout(() => elemento.remove(), 500);
                     }, 3000);
                 }
             };
 
-            ocultarAlerta(alertaExito);
-            ocultarAlerta(alertaError);
-            ocultarAlerta(alertaPeligro);
+            ocultarAlerta(document.getElementById('alerta-exito'));
+            ocultarAlerta(document.getElementById('alerta-error'));
+            ocultarAlerta(document.getElementById('alerta-peligro'));
+
+            document.querySelectorAll('.alerta-mensaje').forEach(ocultarAlerta);
         });
     </script>
 </body>

@@ -5,24 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Horario extends Model
+class Entrega extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'materia_id',
+        'tarea_id',
         'usuario_id',
-        'hora_inicio',
-        'hora_fin',
-        'dias'
+        'archivo_pdf',
+        'calificacion',
+        'comentarios'
     ];
 
-    public function materia() {
-        return $this->belongsTo(Materia::class);
-    }
-
-    public function profesor() {
-        return $this->belongsTo(User::class, 'usuario_id');
+    public function tarea()
+    {
+        return $this->belongsTo(Tarea::class);
     }
 
     public function usuario()
