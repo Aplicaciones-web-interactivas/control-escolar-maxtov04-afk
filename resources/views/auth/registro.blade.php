@@ -19,7 +19,7 @@
             <select name="rol" class="w-full border border-gray-300 dark:border-gray-600 p-2 rounded outline-none bg-white dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 transition-all">
                 <option value="estudiante">Estudiante</option>
                 <option value="profesor">Profesor</option>
-            </select>
+                <option value="admin">Administrador</option> </select>
         </div>
         <div>
             <label class="block text-xs font-bold mb-1 uppercase text-gray-600 dark:text-gray-400 transition-colors">Contraseña</label>

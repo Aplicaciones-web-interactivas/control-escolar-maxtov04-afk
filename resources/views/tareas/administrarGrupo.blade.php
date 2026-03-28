@@ -8,7 +8,7 @@
                 Administrar Tareas
             </h2>
             <p class="text-gray-500 dark:text-gray-400 font-mono text-sm mt-1">
-                {{ $grupo->horario->materia->nombre }} - Grupo {{ $grupo->nombre }}
+                {{ $grupo->horario->materia->nombre }} - {{ $grupo->nombre }}
             </p>
         </div>
         <a href="{{ route('profesor.misGrupos') }}" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded text-sm font-black transition-all uppercase shadow-sm">
@@ -98,9 +98,7 @@
                                 @if($tarea->material_apoyo)
                                     <div class="mb-4">
                                         <a href="{{ asset('storage/' . $tarea->material_apoyo) }}" target="_blank" class="inline-flex items-center gap-2 text-sm font-bold text-blue-600 dark:text-blue-400 hover:underline">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.372L8.552 18.32m.009-.01l-.01.01m5.699-9.941l-7.81 7.81a1.5 1.5 0 002.112 2.13" />
-                                            </svg>
+                                            <i class="fa-solid fa-paperclip"></i>
                                             Ver Material Adjunto
                                         </a>
                                     </div>
@@ -133,9 +131,7 @@
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md border border-gray-100 dark:border-gray-700 transform transition-all">
         <div class="text-center mb-6">
             <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/30 mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-red-600 dark:text-red-500">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                </svg>
+                <i class="fa-solid fa-triangle-exclamation text-2xl text-red-600 dark:text-red-500"></i>
             </div>
             <h3 class="text-lg font-black text-gray-900 dark:text-white uppercase">¿Eliminar esta tarea?</h3>
             <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">

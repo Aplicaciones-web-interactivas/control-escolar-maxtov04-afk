@@ -17,7 +17,7 @@ class AuthController extends Controller
         $request->validate([
             'nombre' => 'required',
             'clave_institucional' => 'required|unique:users',
-            'rol' => 'required',
+            'rol' => 'required|in:estudiante,profesor,admin',
             'password' => 'required',
         ], [
             'clave_institucional.unique' => 'Esta clave institucional ya está registrada en el sistema.',
@@ -26,7 +26,7 @@ class AuthController extends Controller
             'password.required' => 'Debes ingresar una contraseña.'
         ]);
 
-        User::create([
+        $user = User::create([
             'nombre' => $request->nombre,
             'clave_institucional' => $request->clave_institucional,
             'rol' => $request->rol,
@@ -34,7 +34,11 @@ class AuthController extends Controller
             'activo' => true,
         ]);
 
-        return redirect()->route('login')->with('success', 'Registro completado. Ya puedes ingresar con tus credenciales.');
+        Auth::login($user);
+
+        $request->session()->regenerate();
+
+        return redirect()->route('dashboard')->with('success', '¡Bienvenido al sistema, ' . $user->nombre . '!');
     }
 
     public function showLogin() {

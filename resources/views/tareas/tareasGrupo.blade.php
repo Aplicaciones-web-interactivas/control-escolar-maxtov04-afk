@@ -7,7 +7,7 @@
             <h2 class="text-2xl font-black text-blue-600 dark:text-blue-400 uppercase">
                 Tareas: {{ $grupo->horario->materia->nombre }}
             </h2>
-            <p class="text-gray-500 dark:text-gray-400 font-mono text-sm mt-1">Grupo: {{ $grupo->nombre }}</p>
+            <p class="text-gray-500 dark:text-gray-400 font-mono text-sm mt-1">{{ $grupo->nombre }}</p>
         </div>
         <a href="{{ route('estudiante.misGrupos') }}" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded text-sm font-black transition-all uppercase shadow-sm">
             Volver a Mis Grupos
@@ -79,10 +79,10 @@
                                 </div>
 
                                 <div id="form-reemplazo-{{ $tarea->id }}" class="hidden">
-                                    <form action="{{ route('estudiante.tareas.entregar', $tarea->id) }}" method="POST" enctype="multipart/form-data" class="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded border border-yellow-200 dark:border-yellow-800/50">
+                                    <form action="{{ route('estudiante.tareas.entregar', $tarea->id) }}" method="POST" enctype="multipart/form-data" class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded border border-blue-200 dark:border-blue-800/50">
                                         @csrf
                                         <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-2">Sube tu nuevo archivo (Solo PDF)</label>
-                                        <input type="file" name="archivo_pdf" accept=".pdf" class="w-full text-xs text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:font-black file:bg-white dark:file:bg-gray-700 dark:file:text-white file:text-yellow-700 hover:file:bg-gray-50 mb-4 transition-colors outline-none" required>
+                                        <input type="file" name="archivo_pdf" accept=".pdf" class="w-full text-xs text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:font-black file:bg-white dark:file:bg-gray-700 dark:file:text-white file:text-blue-700 hover:file:bg-gray-50 mb-4 transition-colors outline-none" required>
                                         
                                         <div class="flex gap-2">
                                             <button type="button" onclick="ocultarFormulario({{ $tarea->id }})" class="w-1/3 bg-gray-500 hover:bg-gray-600 text-white px-2 py-2 rounded text-xs font-black transition-all uppercase shadow-sm">
@@ -105,7 +105,7 @@
                                     
                                     @if($miEntrega->comentarios)
                                         <div class="bg-white dark:bg-gray-800 p-3 rounded border dark:border-gray-700 text-sm text-gray-600 dark:text-gray-300 italic flex gap-2">
-                                            <i class="fa-solid fa-quote-left text-gray-400 mt-1 text-xs"></i>
+                                            Comentarios:
                                             <span>{{ $miEntrega->comentarios }}</span>
                                         </div>
                                     @else
